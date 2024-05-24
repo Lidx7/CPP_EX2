@@ -90,3 +90,282 @@ using namespace ariel;
         }
         return neighbors;
     }
+
+                                        /***********************
+                                         *      Operators      *
+                                         ***********************/
+
+
+    /*********************************ADDITION*********************************/
+
+    Graph operator+(Graph &g1, Graph &g2){
+        if(g1.getVerticesCount() != g2.getVerticesCount()){
+            throw invalid_argument("The graphs aren't the same size");
+        }
+
+        Graph new_graph;
+        vector<vector<int>> adding;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                row.push_back(g1.getGraphValue(i, j) + g2.getGraphValue(i, j));
+            }
+            adding.push_back(row);
+        }
+
+        new_graph.loadGraph(adding);
+        return new_graph;
+    }
+
+    void operator+=(Graph &g1, Graph &g2){
+        if(g1.getVerticesCount() != g2.getVerticesCount()){
+            throw invalid_argument("The graphs aren't the same size");
+        }
+
+        vector<vector<int>> adding;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                row.push_back(g1.getGraphValue(i, j) + g2.getGraphValue(i, j));
+            }
+            adding.push_back(row);
+        }
+
+        g1.loadGraph(adding);
+    }
+
+    void operator++(Graph &g1){
+        vector<vector<int>> adding;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                if(g1.getGraphValue(i, j) != 0){
+                    row.push_back(g1.getGraphValue(i, j) + 1);
+                }
+            }
+            adding.push_back(row);
+        }
+
+        g1.loadGraph(adding);
+    }
+
+    void operator++(Graph &g1,int){
+        vector<vector<int>> adding;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                if(g1.getGraphValue(i, j) != 0){
+                    row.push_back(1 + g1.getGraphValue(i, j));
+                }
+            }
+            adding.push_back(row);
+        }
+
+        g1.loadGraph(adding);
+    }
+
+
+    /*********************************SUBTRACTION**********************************/
+
+    Graph operator-(Graph &g1, Graph &g2){
+        if(g1.getVerticesCount() != g2.getVerticesCount()){
+            throw invalid_argument("The graphs aren't the same size");
+        }
+
+        Graph new_graph;
+        vector<vector<int>> subtracting;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                row.push_back(g1.getGraphValue(i, j) - g2.getGraphValue(i, j));
+            }
+            subtracting.push_back(row);
+        }
+
+        new_graph.loadGraph(subtracting);
+        return new_graph;
+    }
+
+    void operator-=(Graph &g1, Graph &g2){
+        if(g1.getVerticesCount() != g2.getVerticesCount()){
+            throw invalid_argument("The graphs aren't the same size");
+        }
+
+        vector<vector<int>> subtracting;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                row.push_back(g1.getGraphValue(i, j) - g2.getGraphValue(i, j));
+            }
+            subtracting.push_back(row);
+        }
+
+        g1.loadGraph(subtracting);
+    }
+
+    void operator--(Graph &g1){
+        vector<vector<int>> subtracting;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                if(g1.getGraphValue(i, j) != 0){
+                    row.push_back(g1.getGraphValue(i, j) - 1);
+                }
+            }
+            subtracting.push_back(row);
+        }
+
+        g1.loadGraph(subtracting);
+    }
+
+    Graph operator--(Graph &g1,int){
+        Graph new_graph;
+        vector<vector<int>> subtracting;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                if(g1.getGraphValue(i, j) != 0){
+                    row.push_back(-1 + g1.getGraphValue(i, j));
+                }
+            }
+            subtracting.push_back(row);
+        }
+
+        new_graph.loadGraph(subtracting);
+        return new_graph;
+    }
+
+
+    /*********************************MULTIPLICATION**********************************/
+    
+    Graph operator*(Graph &g1, Graph &g2){
+        if(g1.getVerticesCount() != g2.getVerticesCount()){
+            throw invalid_argument("The graphs aren't the same size");
+        }
+
+        Graph new_graph;
+        vector<vector<int>> multiplying;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                for(vector<int>::size_type k=0; k < g1.getVerticesCount(); k++){
+                    row.push_back(g1.getGraphValue(i, k) * g2.getGraphValue(k, j));
+                }
+            }
+            multiplying.push_back(row); /*TODO: check if this line sholud be here (updated every run of the i loop)
+                                                or inside the second loop (updated everyrun of the j loop)*/
+        }
+
+        new_graph.loadGraph(multiplying);
+        return new_graph;
+    }
+
+    void operator*=(Graph &g1, Graph &g2){
+        if(g1.getVerticesCount() != g2.getVerticesCount()){
+            throw invalid_argument("The graphs aren't the same size");
+        }
+
+        vector<vector<int>> multiplying;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                for(vector<int>::size_type k=0; k < g1.getVerticesCount(); k++){
+                    row.push_back(g1.getGraphValue(i, k) * g2.getGraphValue(k, j));
+                }
+            }
+            multiplying.push_back(row);
+        }
+
+        g1.loadGraph(multiplying);
+    }
+
+    void operator*(Graph &g1, int scalar){
+        vector<vector<int>> multiplying;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                row.push_back(scalar * g1.getGraphValue(i, j));
+            }
+            multiplying.push_back(row);
+        }
+
+        g1.loadGraph(multiplying);
+    }
+
+    /*TODO: check if this function is actually necessary, or is the function above is enough (is the placement of the scalar is important?) */
+    void operator*(int scalar, Graph &g1){
+        vector<vector<int>> multiplying;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                row.push_back(scalar * g1.getGraphValue(i, j));
+            }
+            multiplying.push_back(row);
+        }
+
+        g1.loadGraph(multiplying);
+    }
+
+    /*********************************UNARY**********************************/
+
+    Graph operator-(Graph &g1){
+        Graph new_graph;
+        vector<vector<int>> subtracting;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                row.push_back(-1 * g1.getGraphValue(i, j));
+            }
+            subtracting.push_back(row);
+        }
+        new_graph.loadGraph(subtracting);
+        return new_graph;
+    }
+
+    Graph operator+(Graph &g1){
+        Graph new_graph;
+        vector<vector<int>> adding;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                row.push_back(1 * g1.getGraphValue(i, j));
+            }
+            adding.push_back(row);
+        }
+        new_graph.loadGraph(adding);
+        return new_graph;
+    }
+
+    /*********************************COMPARISON**********************************/
+
+    bool operator==(Graph &g1, Graph &g2){
+        if(g1.getVerticesCount() != g2.getVerticesCount()){
+            return false;
+        }
+        
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                if(g1.getGraphValue(i, j) != g2.getGraphValue(i, j)){
+                    return false;
+                }
+            }
+        }
+
+        if(g1 > g2 || g1 < g2){
+            return false;
+        }
+        
+        return true;
+    }
+
+    bool operator!=(Graph &g1, Graph &g2){
+        return !(g1 == g2);
+    }
+
+    bool operator>(Graph &g1, Graph &g2){
+
+    }
+
+    bool operator<(Graph &g1, Graph &g2){
+        
+    }

@@ -30,7 +30,13 @@ namespace ariel{
             vector<int> getNeighbors(int vertex);
             bool getUndirected();
 
-
+            Graph operator+(const Graph &g);
+            Graph operator*(const Graph &g);
+            Graph operator=(const Graph &g);
+            Graph operator+=(const Graph &g);
+            Graph operator*=(const Graph &g);
+            bool operator==(const Graph &g);
+            bool operator!=(const Graph &g);            
     };
 }
 
