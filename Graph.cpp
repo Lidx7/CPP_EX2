@@ -7,7 +7,6 @@
 #include "Graph.hpp"
 #include <iostream>
 using namespace std;
-
 using namespace ariel;
 
     Graph::Graph() : edges_count(0), vertices_count(0), curr_graph(), undirected(false){}
@@ -95,6 +94,13 @@ using namespace ariel;
                                          *      Operators      *
                                          ***********************/
 
+
+    /*********************************PRINTING*********************************/
+    
+    ostream& operator<<(ostream& os, Graph &g){
+        os << g.printGraph();
+        return os;
+    }
 
     /*********************************ADDITION*********************************/
 
@@ -363,9 +369,75 @@ using namespace ariel;
     }
 
     bool operator>(Graph &g1, Graph &g2){
+        if(containsSubmatrix(g1, g2)){
+            return true;
+        }
+        else if(g1.getEdgesCount() > g2.getEdgesCount()){
+            return true;
+        }
+        else if(g1.getEdgesCount() == g2.getEdgesCount()){
+            if(g1.getVerticesCount() > g2.getVerticesCount()){
+                return true;
+            }
+        }
 
+        return false;
     }
 
     bool operator<(Graph &g1, Graph &g2){
+        if(containsSubmatrix(g2, g1)){
+            return true;
+        }
+        else if(g2.getEdgesCount() > g1.getEdgesCount()){
+            return true;
+        }
+        else if(g2.getEdgesCount() == g1.getEdgesCount()){
+            if(g2.getVerticesCount() > g1.getVerticesCount()){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool operator>=(Graph &g1, Graph &g2){
+        return (g1 == g2 || g1 > g2);
+    }
+
+    bool operator<=(Graph &g1, Graph &g2){
+        return (g1 == g2 || g1 < g2);
+    }
+
+
+    // Function to check if the submatrix is found at a given starting position
+    bool isSubmatrixAtPosition(Graph &g1, Graph &g2, int startRow, int startCol) {
+        int subRows = g1.getVerticesCount();
+        int subCols = g1.getVerticesCount();
         
+        for (vector<int>::size_type i = 0; i < subRows; ++i) {
+            for (vector<int>::size_type j = 0; j < subCols; ++j) {
+                if (g1.getGraphValue((startRow + i),(startCol + j)) != g2.getGraphValue(i, j)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // Function to check if a matrix contains a given submatrix
+    bool containsSubmatrix(Graph &g1, Graph &g2) {
+        int rows = g1.getVerticesCount();
+        int cols = g1.getVerticesCount();
+        int subRows = g2.getVerticesCount();
+        int subCols = g2.getVerticesCount();
+
+        // Loop through each possible starting point
+        for (vector<int>::size_type i = 0; i <= rows - subRows; ++i) {
+            for (vector<int>::size_type j = 0; j <= cols - subCols; ++j) {
+                if (isSubmatrixAtPosition(g1, g2, i, j)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
