@@ -33,7 +33,7 @@ namespace ariel{
             bool getUndirected();
 
             /********************OPERATORS********************/
-            friend ostream& operator<<(ostream& os, const Graph &g);
+            friend ostream& operator<<(ostream& os, Graph &g);
             friend Graph operator+(Graph &g1, Graph &g2);
             friend void operator+=(Graph &g1, Graph &g2);
             friend void operator++(Graph &g1);
@@ -46,8 +46,11 @@ namespace ariel{
 
             friend Graph operator*(Graph &g1, Graph &g2);
             friend void operator*=(Graph &g1, Graph &g2);
+            friend void operator*=(Graph &g1, int scalar);
             friend void operator*(Graph &g1, int scalar);
             friend void operator*(int scalar, Graph &g1);
+
+            friend void operator/= (Graph &g1, int scalar);
 
             friend Graph operator-(Graph &g1);
             friend Graph operator+(Graph &g1);

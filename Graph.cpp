@@ -53,14 +53,12 @@ namespace ariel{
         for(i=0; i < vertices_count; i++){
             ans += "{";
 
-            for(j=0; j < vertices_count-1; j++){
-                ans += curr_graph[i][j] + ", ";
+            for(j=0; j < vertices_count; j++){
+                ans += to_string(curr_graph[i][j]) + ", ";
             }
-
-            ans += curr_graph[i][j+1];
             ans += "},\n";
         }
-
+        ans += "\n";
         return ans;
     }
 
@@ -250,22 +248,24 @@ namespace ariel{
             throw invalid_argument("The graphs aren't the same size");
         }
 
+        vector<int>::size_type n = g1.getVerticesCount();
         Graph new_graph;
-        vector<vector<int>> multiplying;
-        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
-            vector<int> row;
-            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
-                for(vector<int>::size_type k=0; k < g1.getVerticesCount(); k++){
-                    row.push_back(g1.getGraphValue(i, k) * g2.getGraphValue(k, j));
+        vector<vector<int>> multiplying(n, vector<int>(n, 0)); // Initialize a n x n matrix with 0
+
+        for(vector<int>::size_type i = 0; i < n; i++){
+            for(vector<int>::size_type j = 0; j < n; j++){
+                int sum = 0;
+                for(vector<int>::size_type k = 0; k < n; k++){
+                    sum += g1.getGraphValue(i, k) * g2.getGraphValue(k, j);
                 }
+                multiplying[i][j] = sum; // Set the computed sum for position (i, j)
             }
-            multiplying.push_back(row); /*TODO: check if this line sholud be here (updated every run of the i loop)
-                                                or inside the second loop (updated everyrun of the j loop)*/
         }
 
         new_graph.loadGraph(multiplying);
         return new_graph;
     }
+
 
     void operator*=(Graph &g1, Graph &g2){
         if(g1.getVerticesCount() != g2.getVerticesCount()){
@@ -279,6 +279,19 @@ namespace ariel{
                 for(vector<int>::size_type k=0; k < g1.getVerticesCount(); k++){
                     row.push_back(g1.getGraphValue(i, k) * g2.getGraphValue(k, j));
                 }
+            }
+            multiplying.push_back(row);
+        }
+
+        g1.loadGraph(multiplying);
+    }
+
+    void operator*=(Graph &g1, int scalar){
+        vector<vector<int>> multiplying;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                row.push_back(scalar * g1.getGraphValue(i, j));
             }
             multiplying.push_back(row);
         }
@@ -313,6 +326,19 @@ namespace ariel{
         g1.loadGraph(multiplying);
     }
 
+    void operator/= (Graph &g1, int scalar){
+        vector<vector<int>> dividing;
+        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+            vector<int> row;
+            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
+                row.push_back(g1.getGraphValue(i, j) / scalar);
+            }
+            dividing.push_back(row);
+        }
+
+        g1.loadGraph(dividing);
+    }
+
     /*********************************UNARY**********************************/
 
     Graph operator-(Graph &g1){
@@ -342,6 +368,8 @@ namespace ariel{
         new_graph.loadGraph(adding);
         return new_graph;
     }
+
+   
 
     /*********************************COMPARISON**********************************/
 
@@ -411,7 +439,7 @@ namespace ariel{
 
 
     // Function to check if the submatrix is found at a given starting position
-    bool isSubmatrixAtPosition(Graph &g1, Graph &g2, int startRow, int startCol) {
+    bool isSubmatrixAtPosition(Graph &g1, Graph &g2, vector<int>::size_type startRow, vector<int>::size_type startCol) {
         int subRows = g1.getVerticesCount();
         int subCols = g1.getVerticesCount();
         
