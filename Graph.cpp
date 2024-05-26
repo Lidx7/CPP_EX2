@@ -460,6 +460,10 @@ namespace ariel{
         int subRows = g2.getVerticesCount();
         int subCols = g2.getVerticesCount();
 
+        if(subRows > rows || subCols > cols){
+            return false;
+        }
+
         // Loop through each possible starting point
         for (vector<int>::size_type i = 0; i <= rows - subRows; ++i) {
             for (vector<int>::size_type j = 0; j <= cols - subCols; ++j) {

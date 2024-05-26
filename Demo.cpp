@@ -53,6 +53,16 @@ int main()
         {1, 0, 0, 1, 0}};
     ariel::Graph g5;
     g5.loadGraph(graph2); // Load the graph to the object.
+    
+    if(g5>g1) // Check if g5 > g1.
+    {
+        cout<<"g5>g1"<<endl;
+    }
+    else
+    {
+        cout<<"g5!>g1"<<endl;
+    }
+    
     try
     {
         ariel::Graph g6 = g5 * g1; // Multiply the two graphs together.
