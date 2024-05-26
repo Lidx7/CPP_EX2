@@ -9,6 +9,7 @@
 using namespace std;
 using namespace ariel;
 
+namespace ariel{
     Graph::Graph() : edges_count(0), vertices_count(0), curr_graph(), undirected(false){}
 
     void Graph::loadGraph(std::vector<std::vector<int>> given_graph){
@@ -441,3 +442,4 @@ using namespace ariel;
         }
         return false;
     }
+}

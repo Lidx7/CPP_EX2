@@ -19,6 +19,8 @@ namespace ariel{
             int vertices_count;
             vector<vector<int>> curr_graph;
             bool undirected;
+            friend bool isSubmatrixAtPosition(Graph &g1, Graph &g2, int startRow, int startCol);
+            friend bool containsSubmatrix(Graph &g1, Graph &g2);
 
         public:
             Graph();
@@ -32,6 +34,30 @@ namespace ariel{
 
             /********************OPERATORS********************/
             friend ostream& operator<<(ostream& os, const Graph &g);
+            friend Graph operator+(Graph &g1, Graph &g2);
+            friend void operator+=(Graph &g1, Graph &g2);
+            friend void operator++(Graph &g1);
+            friend void operator++(Graph &g1,int);
+
+            friend Graph operator-(Graph &g1, Graph &g2);
+            friend void operator-=(Graph &g1, Graph &g2);
+            friend void operator--(Graph &g1);
+            friend Graph operator--(Graph &g1,int);
+
+            friend Graph operator*(Graph &g1, Graph &g2);
+            friend void operator*=(Graph &g1, Graph &g2);
+            friend void operator*(Graph &g1, int scalar);
+            friend void operator*(int scalar, Graph &g1);
+
+            friend Graph operator-(Graph &g1);
+            friend Graph operator+(Graph &g1);
+
+            friend bool operator==(Graph &g1, Graph &g2);
+            friend bool operator!=(Graph &g1, Graph &g2);
+            friend bool operator>(Graph &g1, Graph &g2);
+            friend bool operator<(Graph &g1, Graph &g2);
+            friend bool operator>=(Graph &g1, Graph &g2);
+            friend bool operator<=(Graph &g1, Graph &g2);
 
            
     };
