@@ -51,14 +51,14 @@ namespace ariel{
 
         vector<int>::size_type i=0, j=0;
         for(i=0; i < vertices_count; i++){
-            ans += "{";
+            ans += "[";
+            ans += to_string(curr_graph[i][0]);
 
-            for(j=0; j < vertices_count; j++){
-                ans += to_string(curr_graph[i][j]) + ", ";
+            for(j=1; j < vertices_count; j++){
+                ans += ", " + to_string(curr_graph[i][j]);
             }
-            ans += "},\n";
+            ans += "]\n";
         }
-        ans += "\n";
         return ans;
     }
 
@@ -223,8 +223,7 @@ namespace ariel{
         g1.loadGraph(subtracting);
     }
 
-    Graph operator--(Graph &g1,int){
-        Graph new_graph;
+    void operator--(Graph &g1,int){
         vector<vector<int>> subtracting;
         for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
             vector<int> row;
@@ -236,8 +235,7 @@ namespace ariel{
             subtracting.push_back(row);
         }
 
-        new_graph.loadGraph(subtracting);
-        return new_graph;
+        g1.loadGraph(subtracting);
     }
 
 
@@ -272,15 +270,18 @@ namespace ariel{
             throw invalid_argument("The graphs aren't the same size");
         }
 
-        vector<vector<int>> multiplying;
-        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
-            vector<int> row;
-            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
-                for(vector<int>::size_type k=0; k < g1.getVerticesCount(); k++){
-                    row.push_back(g1.getGraphValue(i, k) * g2.getGraphValue(k, j));
+        vector<int>::size_type n = g1.getVerticesCount();
+        Graph new_graph;
+        vector<vector<int>> multiplying(n, vector<int>(n, 0)); // Initialize a n x n matrix with 0
+
+        for(vector<int>::size_type i = 0; i < n; i++){
+            for(vector<int>::size_type j = 0; j < n; j++){
+                int sum = 0;
+                for(vector<int>::size_type k = 0; k < n; k++){
+                    sum += g1.getGraphValue(i, k) * g2.getGraphValue(k, j);
                 }
+                multiplying[i][j] = sum; // Set the computed sum for position (i, j)
             }
-            multiplying.push_back(row);
         }
 
         g1.loadGraph(multiplying);
@@ -299,7 +300,8 @@ namespace ariel{
         g1.loadGraph(multiplying);
     }
 
-    void operator*(Graph &g1, int scalar){
+    Graph operator*(Graph &g1, int scalar){
+        Graph new_graph;
         vector<vector<int>> multiplying;
         for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
             vector<int> row;
@@ -309,11 +311,13 @@ namespace ariel{
             multiplying.push_back(row);
         }
 
-        g1.loadGraph(multiplying);
+        new_graph.loadGraph(multiplying);
+        return new_graph;
     }
 
     /*TODO: check if this function is actually necessary, or is the function above is enough (is the placement of the scalar is important?) */
-    void operator*(int scalar, Graph &g1){
+    Graph operator*(int scalar, Graph &g1){
+        Graph new_graph;
         vector<vector<int>> multiplying;
         for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
             vector<int> row;
@@ -323,7 +327,8 @@ namespace ariel{
             multiplying.push_back(row);
         }
 
-        g1.loadGraph(multiplying);
+        new_graph.loadGraph(multiplying);
+        return new_graph;
     }
 
     void operator/= (Graph &g1, int scalar){
@@ -386,10 +391,6 @@ namespace ariel{
             }
         }
 
-        if(g1 > g2 || g1 < g2){
-            return false;
-        }
-        
         return true;
     }
 
