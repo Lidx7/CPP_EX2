@@ -62,6 +62,22 @@ int main()
     {
         cout<<"g5!>g1"<<endl;
     }
+
+    ariel::Graph g6;
+    vector<vector<int>> graph6 = {
+        {0, 1, 0},
+        {1, 0, 1},
+        {0, 1, 0}};
+    g1.loadGraph(graph6);
+
+    if(g1 == g6){
+        cout<<(g1==g2)<<endl;
+        cout<<"g1==g6"<<endl;
+    }
+    else
+    {
+        cout<<"g1!=g1"<<endl;
+    }
     
     try
     {

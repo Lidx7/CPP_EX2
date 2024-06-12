@@ -12,6 +12,7 @@
 
 using namespace std;
 
+//TODO: try to reduce the duplicated const functions.
 namespace ariel{
     class Graph{
         private:
@@ -19,16 +20,20 @@ namespace ariel{
             int vertices_count;
             vector<vector<int>> curr_graph;
             bool undirected;
-            friend bool isSubmatrixAtPosition(Graph &g1, Graph &g2, int startRow, int startCol);
-            friend bool containsSubmatrix(Graph &g1, Graph &g2);
+            friend bool isSubmatrixAtPosition(const Graph &g1, const Graph &g2, int startRow, int startCol);
+            friend bool containsSubmatrix(const Graph &g1, const Graph &g2);
 
         public:
             Graph();
+            Graph(const Graph& other);
             void loadGraph(std::vector<std::vector<int>> graph);
             string printGraph();
             vector<int>::size_type getEdgesCount();
+            vector<int>::size_type getEdgesCount() const;
             vector<int>::size_type getVerticesCount();
+            vector<int>::size_type getVerticesCount() const;
             int getGraphValue(int i, int j);
+            int getGraphValue(int i, int j) const;
             vector<int> getNeighbors(int vertex);
             bool getUndirected();
 
@@ -37,13 +42,13 @@ namespace ariel{
             
             friend Graph operator+(Graph &g1, Graph &g2);
             friend void operator+=(Graph &g1, Graph &g2);
-            friend void operator++(Graph &g1);
-            friend void operator++(Graph &g1,int);
+            friend Graph& operator++(Graph &g1);
+            friend Graph operator++(Graph &g1, int);
 
             friend Graph operator-(Graph &g1, Graph &g2);
             friend void operator-=(Graph &g1, Graph &g2);
-            friend void operator--(Graph &g1);
-            friend void operator--(Graph &g1,int);
+            friend Graph& operator--(Graph &g1);
+            friend Graph operator--(Graph &g1, int);
 
             friend Graph operator*(Graph &g1, Graph &g2);
             friend void operator*=(Graph &g1, Graph &g2);
@@ -56,12 +61,12 @@ namespace ariel{
             friend Graph operator-(Graph &g1);
             friend Graph operator+(Graph &g1);
 
-            friend bool operator==(Graph &g1, Graph &g2);
-            friend bool operator!=(Graph &g1, Graph &g2);
-            friend bool operator>(Graph &g1, Graph &g2);
-            friend bool operator<(Graph &g1, Graph &g2);
-            friend bool operator>=(Graph &g1, Graph &g2);
-            friend bool operator<=(Graph &g1, Graph &g2);
+            friend bool operator==(const Graph g1, const Graph g2);
+            friend bool operator!=(const Graph g1, const Graph g2);
+            friend bool operator>(const Graph g1, const Graph g2);
+            friend bool operator<(const Graph g1, const Graph g2);
+            friend bool operator>=(const Graph g1, const Graph g2);
+            friend bool operator<=(const Graph g1, const Graph g2);
 
            
     };

@@ -8,7 +8,7 @@ OBJECTS=$(subst .cpp,.o,$(SOURCES))
 
 all: demo test
 
-run: demo test
+run: test
 	./$^
 
 demo: Demo.o Graph.o Algorithms.o

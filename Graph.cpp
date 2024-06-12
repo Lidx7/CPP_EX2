@@ -11,6 +11,8 @@ using namespace ariel;
 
 namespace ariel{
     Graph::Graph() : edges_count(0), vertices_count(0), curr_graph(), undirected(false){}
+    Graph::Graph(const Graph& other) : edges_count(other.edges_count), vertices_count(other.vertices_count), curr_graph(other.curr_graph), undirected(other.undirected) {}
+
 
     void Graph::loadGraph(std::vector<std::vector<int>> given_graph){
         if(given_graph.empty()){
@@ -65,12 +67,21 @@ namespace ariel{
     vector<int>::size_type Graph::getEdgesCount(){
         return (vector<int>::size_type)edges_count;
     }
+    vector<int>::size_type Graph::getEdgesCount() const{
+        return (vector<int>::size_type)edges_count;
+    }
 
     vector<int>::size_type Graph::getVerticesCount(){
         return (vector<int>::size_type)vertices_count;
     }
+    vector<int>::size_type Graph::getVerticesCount() const{
+        return (vector<int>::size_type)vertices_count;
+    }
 
     int Graph::getGraphValue(int i, int j){
+        return (int)curr_graph[(vector<int>::size_type)i][(vector<int>::size_type)j];
+    }
+    int Graph::getGraphValue(int i, int j) const{
         return (int)curr_graph[(vector<int>::size_type)i][(vector<int>::size_type)j];
     }
 
@@ -88,6 +99,7 @@ namespace ariel{
         }
         return neighbors;
     }
+
 
                                         /***********************
                                          *      Operators      *
@@ -139,35 +151,47 @@ namespace ariel{
         g1.loadGraph(adding);
     }
 
-    void operator++(Graph &g1){
-        vector<vector<int>> adding;
-        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
-            vector<int> row;
-            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
-                if(g1.getGraphValue(i, j) != 0){
-                    row.push_back(g1.getGraphValue(i, j) + 1);
-                }
-            }
-            adding.push_back(row);
-        }
+    Graph operator++(Graph &g1, int) {
+        Graph temp = g1;
+        
 
-        g1.loadGraph(adding);
-    }
-
-    void operator++(Graph &g1,int){
         vector<vector<int>> adding;
-        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+        for(vector<int>::size_type i = 0; i < g1.getVerticesCount(); i++) {
             vector<int> row;
-            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
-                if(g1.getGraphValue(i, j) != 0){
+            for(vector<int>::size_type j = 0; j < g1.getVerticesCount(); j++) {
+                if (g1.getGraphValue(i, j) != 0) {
                     row.push_back(1 + g1.getGraphValue(i, j));
+                } else {
+                    row.push_back(0);
                 }
             }
             adding.push_back(row);
         }
 
         g1.loadGraph(adding);
+        return temp;
     }
+
+
+    Graph& operator++(Graph &g1) {
+        
+        vector<vector<int>> adding;
+        for(vector<int>::size_type i = 0; i < g1.getVerticesCount(); i++) {
+            vector<int> row;
+            for(vector<int>::size_type j = 0; j < g1.getVerticesCount(); j++) {
+                if(g1.getGraphValue(i, j) != 0) {
+                    row.push_back(1 + g1.getGraphValue(i, j));
+                } else {
+                    row.push_back(0);
+                }
+            }
+            adding.push_back(row);
+        }
+
+        g1.loadGraph(adding);
+        return g1;
+    }
+
 
 
     /*********************************SUBTRACTION**********************************/
@@ -208,34 +232,45 @@ namespace ariel{
         g1.loadGraph(subtracting);
     }
 
-    void operator--(Graph &g1){
-        vector<vector<int>> subtracting;
-        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+    Graph operator--(Graph &g1, int) {
+        Graph temp = g1;
+        
+
+        vector<vector<int>> adding;
+        for(vector<int>::size_type i = 0; i < g1.getVerticesCount(); i++) {
             vector<int> row;
-            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
-                if(g1.getGraphValue(i, j) != 0){
+            for(vector<int>::size_type j = 0; j < g1.getVerticesCount(); j++) {
+                if (g1.getGraphValue(i, j) != 0) {
                     row.push_back(g1.getGraphValue(i, j) - 1);
+                } else {
+                    row.push_back(0);
                 }
             }
-            subtracting.push_back(row);
+            adding.push_back(row);
         }
 
-        g1.loadGraph(subtracting);
+        g1.loadGraph(adding);
+        return temp;
     }
 
-    void operator--(Graph &g1,int){
-        vector<vector<int>> subtracting;
-        for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
+
+    Graph& operator--(Graph &g1) {
+        
+        vector<vector<int>> adding;
+        for(vector<int>::size_type i = 0; i < g1.getVerticesCount(); i++) {
             vector<int> row;
-            for(vector<int>::size_type j=0; j < g1.getVerticesCount(); j++){
-                if(g1.getGraphValue(i, j) != 0){
-                    row.push_back(-1 + g1.getGraphValue(i, j));
+            for(vector<int>::size_type j = 0; j < g1.getVerticesCount(); j++) {
+                if(g1.getGraphValue(i, j) != 0) {
+                    row.push_back(g1.getGraphValue(i, j) - 1);
+                } else {
+                    row.push_back(0);
                 }
             }
-            subtracting.push_back(row);
+            adding.push_back(row);
         }
 
-        g1.loadGraph(subtracting);
+        g1.loadGraph(adding);
+        return g1;
     }
 
 
@@ -263,7 +298,6 @@ namespace ariel{
         new_graph.loadGraph(multiplying);
         return new_graph;
     }
-
 
     void operator*=(Graph &g1, Graph &g2){
         if(g1.getVerticesCount() != g2.getVerticesCount()){
@@ -378,7 +412,7 @@ namespace ariel{
 
     /*********************************COMPARISON**********************************/
 
-    bool operator==(Graph &g1, Graph &g2){
+    bool operator==(const Graph g1, const Graph g2){
         if(g1.getVerticesCount() != g2.getVerticesCount()){
             return false;
         }
@@ -394,19 +428,23 @@ namespace ariel{
         return true;
     }
 
-    bool operator!=(Graph &g1, Graph &g2){
+    bool operator!=(const Graph g1, const Graph g2){
         return !(g1 == g2);
     }
 
-    bool operator>(Graph &g1, Graph &g2){
+    bool operator>(const Graph g1, const Graph g2){
+        if(g1 == g2){
+            return false;
+        }
         if(containsSubmatrix(g1, g2)){
             return true;
         }
-        else if(g1.getEdgesCount() > g2.getEdgesCount()){
-            return true;
-        }
-        else if(g1.getEdgesCount() == g2.getEdgesCount()){
-            if(g1.getVerticesCount() > g2.getVerticesCount()){
+        else if(g1.getEdgesCount() != g2.getEdgesCount()){
+
+            if(g1.getEdgesCount() > g2.getEdgesCount()){
+                return true;
+            }
+            else if(g1.getVerticesCount() > g2.getVerticesCount()){
                 return true;
             }
         }
@@ -414,15 +452,19 @@ namespace ariel{
         return false;
     }
 
-    bool operator<(Graph &g1, Graph &g2){
+    bool operator<(const Graph g1, const Graph g2){
+        if(g2 == g1){
+            return false;
+        }
         if(containsSubmatrix(g2, g1)){
             return true;
         }
-        else if(g2.getEdgesCount() > g1.getEdgesCount()){
-            return true;
-        }
-        else if(g2.getEdgesCount() == g1.getEdgesCount()){
-            if(g2.getVerticesCount() > g1.getVerticesCount()){
+        else if(g2.getEdgesCount() != g1.getEdgesCount()){
+
+            if(g2.getEdgesCount() > g1.getEdgesCount()){
+                return true;
+            }
+            else if(g2.getVerticesCount() > g1.getVerticesCount()){
                 return true;
             }
         }
@@ -430,17 +472,17 @@ namespace ariel{
         return false;
     }
 
-    bool operator>=(Graph &g1, Graph &g2){
+    bool operator>=(const Graph g1, const Graph g2){
         return (g1 == g2 || g1 > g2);
     }
 
-    bool operator<=(Graph &g1, Graph &g2){
+    bool operator<=(const Graph g1, const Graph g2){
         return (g1 == g2 || g1 < g2);
     }
 
 
     // Function to check if the submatrix is found at a given starting position
-    bool isSubmatrixAtPosition(Graph &g1, Graph &g2, vector<int>::size_type startRow, vector<int>::size_type startCol) {
+    bool isSubmatrixAtPosition(const Graph &g1, const Graph &g2, vector<int>::size_type startRow, vector<int>::size_type startCol) {
         int subRows = g1.getVerticesCount();
         int subCols = g1.getVerticesCount();
         
@@ -455,7 +497,7 @@ namespace ariel{
     }
 
     // Function to check if a matrix contains a given submatrix
-    bool containsSubmatrix(Graph &g1, Graph &g2) {
+    bool containsSubmatrix(const Graph &g1, const Graph &g2) {
         int rows = g1.getVerticesCount();
         int cols = g1.getVerticesCount();
         int subRows = g2.getVerticesCount();
