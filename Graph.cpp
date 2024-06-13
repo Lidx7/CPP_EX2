@@ -366,6 +366,9 @@ namespace ariel{
     }
 
     void operator/= (Graph &g1, int scalar){
+        if(scalar == 0){
+            throw __throw_invalid_argument;
+        }
         vector<vector<int>> dividing;
         for(vector<int>::size_type i=0; i < g1.getVerticesCount(); i++){
             vector<int> row;

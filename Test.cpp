@@ -427,6 +427,9 @@ TEST_CASE("Invalid operations")
         {1, 0, 0, 1, 0}};
     g6.loadGraph(graph3);
     CHECK_THROWS(g1 + g6);
+
+    
+    CHECK_THROWS(g1 /= 0);
 }
 TEST_CASE("Test graph comparison with nil graph"){
 
